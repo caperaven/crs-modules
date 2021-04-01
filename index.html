@@ -8,6 +8,34 @@
     <title>Document</title>
 </head>
 <body>
+    <my-component></my-component>
 
+    <script type="module">
+        import "/src/index.js";
+        crs.modules.add("fnTest", "/app/function-test.js");
+        crs.modules.add("clsTest", "/app/class-test.js");
+        crs.modules.add("lib", "/app/library-test.js");
+        crs.modules.add("comp", "/app/component.js");
+        crs.modules.add("default", "/app/default.js");
+
+        console.log(await crs.modules.call("fnTest", null, "functionTest", 1, 2));
+        console.log(await crs.modules.getInstanceOf("clsTest", "Test"));
+        console.log(await crs.modules.getInstanceOf("clsTest", "DefaultClass", true));
+
+        await crs.modules.callDefault("default", null, "Hello World");
+
+        await crs.modules.get("lib");
+        await crs.modules.get("comp");
+
+        await crs.modules.clear();
+
+        console.log(await crs.modules.call("fnTest", null, "functionTest", 1, 2));
+        console.log(await crs.modules.getInstanceOf("clsTest", "Test"));
+        console.log(await crs.modules.getInstanceOf("clsTest", "DefaultClass", true));
+
+
+        await crs.modules.get("lib");
+        await crs.modules.get("comp");
+    </script>
 </body>
 </html>

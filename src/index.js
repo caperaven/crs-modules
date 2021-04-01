@@ -1,6 +1,4 @@
-// import files you want part of your library here.
-import {MyClass} from "./my-class.js"
+import {Modules} from "./modules.js";
 
-
-// export your api here.
-export {MyClass}
+globalThis.crs = globalThis.crs || {};
+globalThis.crs.modules = new Modules();
