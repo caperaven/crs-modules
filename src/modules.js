@@ -38,10 +38,15 @@ export class Modules {
         return (await this.get(key))?.default;
     }
 
-    async getInstanceOf(key, className, isDefault = false) {
+    async getInstanceOf(key, className) {
         const module = await this.get(key);
-        const result = isDefault ? module?.default : module?.[className];
+        const result = module?.[className];
         return result ? new result() : null;
+    }
+
+    async getInstanceOfDefault(key) {
+        const proto = await this.getDefault(key);
+        return proto ? new proto() : null;
     }
 
     async call(key, thisObj, fnName, ...args) {

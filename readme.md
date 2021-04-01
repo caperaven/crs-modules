@@ -48,6 +48,13 @@ Create a class instance defined on the module.
 ```js
 await crs.modules.getInstanceOf("module-name", "ClassName");
 ```
+
+### getInstanceOfDefault
+Create a class instance that is exported as the default
+
+```js
+await crs.modules.getInstanceOfDefault("module-name");
+```
 ### call
 Call a function defined on the module.
 
