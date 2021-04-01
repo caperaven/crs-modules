@@ -2,13 +2,14 @@ const fs = require("fs");
 const mkdirp = require("mkdirp");
 const glob = require("glob");
 const path = require("path");
+const {minify} = require("terser");
 
 class Publish {
     static async distribute() {
         const instance = new Publish();
         instance.copyFiles("./dist/*.*");
         instance.copyFiles("./readme.md");
-        //instance.copyFiles("./examples/*.html", "examples");
+        await instance.copyMinified("./src/index.js");
         instance.bumpVersion();
     }
     
@@ -23,6 +24,21 @@ class Publish {
             const fileName = path.basename(file);
             this.initFolder(target);
             fs.copyFileSync(file, `${target}/${fileName}`);
+        }
+    }
+
+    async copyMinified(query, folder) {
+        const files = await this.getFiles(query);
+        for (let file of files) {
+            const target = folder != null ? `./publish/${folder}/` : `./publish/`;
+            const fileName = path.basename(file);
+            this.initFolder(target);
+            const text = fs.readFileSync(file, {encoding: "utf8"});
+
+            console.log(`${target}/${fileName}`);
+
+            const result = await minify(text).catch(e => console.error (e));
+            fs.writeFileSync(`${target}/${fileName}`, result.code);
         }
     }
 
