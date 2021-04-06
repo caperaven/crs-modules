@@ -9,7 +9,7 @@ class Publish {
         const instance = new Publish();
         instance.copyFiles("./dist/*.*");
         instance.copyFiles("./readme.md");
-        await instance.copyMinified("./src/index.js");
+        await instance.copyMinified("./src/crs-modules.js");
         instance.bumpVersion();
     }
     

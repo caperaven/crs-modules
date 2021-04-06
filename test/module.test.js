@@ -1,4 +1,4 @@
-import "./../src/index.js";
+import "./../src/crs-modules.js";
 
 beforeAll(() => {
     crs.modules.add("fnTest", "../app/function-test.js");
