@@ -34,8 +34,9 @@ test("module - remove", async () => {
 })
 
 test("module - getInstanceOf", async () => {
-    const result = await crs.modules.getInstanceOf("clsTest", "Test");
+    const result = await crs.modules.getInstanceOf("clsTest", "Test", "My Name");
     expect(result).not.toBeNull();
+    expect(result._name).toEqual("My Name");
 })
 
 test("module - getInstanceOfDefault", async () => {
