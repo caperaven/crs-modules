@@ -53,7 +53,13 @@ const intance = new proto();
 Create a class instance defined on the module.
 
 ```js
-await crs.modules.getInstanceOf("module-name", "ClassName");
+await crs.modules.getInstanceOf("module-name", "ClassName", param1, param2);
+```
+Parameters are sent to the constructor.  
+If the key and class name is the same you don't need to define the class name.
+
+```js
+await crs.modules.getInstanceOf("Test");
 ```
 
 ### getInstanceOfDefault
@@ -68,6 +74,13 @@ Call a function defined on the module.
 ```js
 await crs.modules.call("module-name", null, "functionTest", param1, param2);
 ```
+
+If the key and the function name is the same you don't need to define the function name.
+
+```js
+await crs.modules.call("lib");
+```
+
 ### callDefault
 Call a function that is set as the default export.
 

@@ -6,3 +6,9 @@ export class Test {
         this._name = name;
     }
 }
+
+export class clsTest {
+    constructor(name) {
+        this._name = name;
+    }
+}

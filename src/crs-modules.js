@@ -40,11 +40,11 @@ export class Modules {
 
     async getPrototype(key, className) {
         const module = await this.get(key);
-        return module?.[className];
+        return module?.[className || key];
     }
 
     async getInstanceOf(key, className, ...args) {
-        const result = await this.getPrototype(key, className);
+        const result = await this.getPrototype(key, className || key);
         return result ? new result(...args) : null;
     }
 
@@ -55,7 +55,7 @@ export class Modules {
 
     async call(key, thisObj, fnName, ...args) {
         const module = await this.get(key);
-        const fn = module?.[fnName];
+        const fn = module?.[fnName || key];
         return await fn?.call(thisObj, ...args);
     }
 

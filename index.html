@@ -19,6 +19,7 @@
         crs.modules.add("default", "/app/default.js");
 
         console.log(await crs.modules.call("fnTest", null, "functionTest", 1, 2));
+        console.log(await crs.modules.getInstanceOf("clsTest"));
         console.log(await crs.modules.getInstanceOf("clsTest", "Test", "My Name"));
         console.log(await crs.modules.getInstanceOfDefault("clsTest"));
 
@@ -26,6 +27,8 @@
 
         await crs.modules.get("lib");
         await crs.modules.get("comp");
+
+        crs.modules.call("lib");
 
         await crs.modules.clear();
 
