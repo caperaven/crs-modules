@@ -42,6 +42,13 @@ Load the module and return the default exported module item.
 const fn = await this.getDefault("module-name");
 ```
 
+### getPrototype
+Get the prototype used to instantiate a class 
+```js
+const proto = await this.getPrototype(key, className);
+const intance = new proto();
+```
+
 ### getInstanceOf
 Create a class instance defined on the module.
 

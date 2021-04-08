@@ -38,9 +38,13 @@ export class Modules {
         return (await this.get(key))?.default;
     }
 
-    async getInstanceOf(key, className, ...args) {
+    async getPrototype(key, className) {
         const module = await this.get(key);
-        const result = module?.[className];
+        return module?.[className];
+    }
+
+    async getInstanceOf(key, className, ...args) {
+        const result = await this.getPrototype(key, className);
         return result ? new result(...args) : null;
     }
 
