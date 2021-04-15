@@ -1,6 +1,6 @@
 {
     "name": "crs-modules",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "description": "",
     "main": "index.js",
     "directories": {
@@ -27,5 +27,8 @@
         "rollup": "^1.23.0",
         "rollup-plugin-terser": "^5.1.2",
         "terser": "^5.6.1"
+    },
+    "dependencies": {
+        "crs-binding": "0.0.217"
     }
 }

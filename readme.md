@@ -9,6 +9,17 @@ When working with schema driven UI however you may want to have something that w
 
 This library aims to be used alongside packages such as crs-schema and crs-components for the above example.
 
+If you are using crs-binding you can extend the binding engine to auto load modules for web components when it parses the dom elements.
+
+```js
+await crs.modules.enableBinding([
+    ["my-component", "/components/my-component.js"],
+    ["other-component", "/components/other-components.js"]
+]);
+```
+
+The parameter is an array of module registries.
+
 ## Functions
 
 ### dispose

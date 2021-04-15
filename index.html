@@ -10,35 +10,16 @@
 <body>
     <my-component></my-component>
 
-    <script type="module">
+    <script type="module" async>
+        import "/node_modules/crs-binding/crs-binding.js";
         import "/src/crs-modules.js";
-        crs.modules.add("fnTest", "/app/function-test.js");
-        crs.modules.add("clsTest", "/app/class-test.js");
-        crs.modules.add("lib", "/app/library-test.js");
-        crs.modules.add("comp", "/app/component.js");
-        crs.modules.add("default", "/app/default.js");
 
-        console.log(await crs.modules.call("fnTest", null, "functionTest", 1, 2));
-        console.log(await crs.modules.getInstanceOf("clsTest"));
-        console.log(await crs.modules.getInstanceOf("clsTest", "Test", "My Name"));
-        console.log(await crs.modules.getInstanceOfDefault("clsTest"));
+        (async () => {
+            await crs.modules.enableBinding([
+                ["my-component", "/app/component.js"]
+            ]);
+        })().then(() => crsbinding.parsers.parseElement(document.body, {}))
 
-        await crs.modules.callDefault("default", null, "Hello World");
-
-        await crs.modules.get("lib");
-        await crs.modules.get("comp");
-
-        crs.modules.call("lib");
-
-        await crs.modules.clear();
-
-        console.log(await crs.modules.call("fnTest", null, "functionTest", 1, 2));
-        console.log(await crs.modules.getInstanceOf("clsTest", "Test", "My Name"));
-        console.log(await crs.modules.getInstanceOfDefault("clsTest"));
-
-
-        await crs.modules.get("lib");
-        await crs.modules.get("comp");
     </script>
 </body>
 </html>

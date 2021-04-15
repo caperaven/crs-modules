@@ -26,6 +26,8 @@ export class Modules {
     }
 
     async get(key) {
+        if (this.registry[key] == null) return;
+
         let result = this.registry[key];
         if (typeof result == "string") {
             result = await import(result);
@@ -67,3 +69,18 @@ export class Modules {
 
 globalThis.crs = globalThis.crs || {};
 globalThis.crs.modules = new Modules();
+
+globalThis.crs.modules.enableBinding = async (modules) => {
+    for (let module of modules || []) {
+        await globalThis.crs.modules.add(module[0], module[1]);
+    }
+
+    if (globalThis.crsbinding != null) {
+        globalThis.crs.modules._parseElement = globalThis.crsbinding.parsers.parseElement;
+        globalThis.crsbinding.parsers.parseElement = async (element, context, options) => {
+            await globalThis.crs.modules._parseElement(element, context, options);
+            globalThis.crs.modules.get(element.nodeName.toLowerCase());
+        }
+    }
+}
+
