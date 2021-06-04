@@ -25,6 +25,11 @@ test("module - getDefault", async () => {
     expect(result).not.toBeUndefined();
 })
 
+test("module - getConstant", async () => {
+    const result = await crs.modules.getConstant("lib", "obj");
+    expect(result.name).toEqual("Test");
+})
+
 test("module - remove", async () => {
     await crs.modules.add("test", "");
     expect(crs.modules.registry["test"]).not.toBeNull();
