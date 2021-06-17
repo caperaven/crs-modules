@@ -6,6 +6,11 @@ beforeAll(() => {
     crs.modules.add("lib", "../app/library-test.js");
     crs.modules.add("comp", "../app/component.js");
     crs.modules.add("default", "../app/default.js");
+    globalThis.document = {
+        body: {
+            dataset: {}
+        }
+    }
 });
 
 afterAll(() => {
