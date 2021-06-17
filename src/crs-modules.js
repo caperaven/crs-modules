@@ -30,7 +30,8 @@ export class Modules {
 
         let result = this.registry[key];
         if (typeof result == "string") {
-            result = await import(result);
+            const prefix = document.body.dataset.appPath || "";
+            result = await import(`${prefix}${result}`);
             this.registry[key] = result;
         }
         return result;
