@@ -9,16 +9,23 @@
 </head>
 <body>
     <my-component></my-component>
+    <test-component data-module="pv"></test-component>
 
     <script type="module" async>
         import "/node_modules/crs-binding/crs-binding.js";
         import "/src/crs-modules.js";
 
         (async () => {
+            await crs.modules.addComponentLocation("pv", "/components");
+            await crs.modules.addModuleLocation("pv", "/modules");
             await crs.modules.enableBinding([
                 ["my-component", "/app/component.js"]
             ]);
         })().then(() => crsbinding.parsers.parseElement(document.body, {}))
+
+        crs.modules.call("pv:math", "add")
+        crs.modules.call("ok:math", "add")
+
 
     </script>
 </body>

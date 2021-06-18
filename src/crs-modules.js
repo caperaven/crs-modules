@@ -1,6 +1,9 @@
 export class Modules {
     constructor() {
         this.registry = {};
+        this.componentRegistry = {};
+        this.componentLocations = {};
+        this.moduleLocations = {};
     }
 
     async dispose() {
@@ -16,8 +19,24 @@ export class Modules {
     }
 
     async add(key, file) {
-        if (this.registry[key] == null) {
-            this.registry[key] = file;
+        return this._addToRegistry(this.registry, key, file);
+    }
+
+    async addComponent(key, file) {
+        return this._addToRegistry(this.componentRegistry, key, file);
+    }
+
+    async addComponentLocation(key, path) {
+        return this._addToRegistry(this.componentLocations, key, path);
+    }
+
+    async addModuleLocation(key, path) {
+        return this._addToRegistry(this.moduleLocations, key, path);
+    }
+
+    async _addToRegistry(registry, key, value) {
+        if (registry[key] == null) {
+            registry[key] = value;
         }
     }
 
@@ -26,15 +45,41 @@ export class Modules {
     }
 
     async get(key) {
-        if (this.registry[key] == null) return;
+        const prefix = document.body.dataset.appPath || "";
 
         let result = this.registry[key];
-        if (typeof result == "string") {
-            const prefix = document.body.dataset.appPath || "";
+        if (result != null) {
+            if (typeof result !== "string") return result;
             result = await import(`${prefix}${result}`);
-            this.registry[key] = result;
+            return this.registry[key] = result;
         }
-        return result;
+
+        const parts = key.split(":");
+        const path = this.moduleLocations[parts[0]];
+        if (path == null) return;
+        result = await import(`${path}/${parts[1]}.js`);
+        return this.registry[key] = result;
+    }
+
+    async getComponent(nodeName, location) {
+        // 1. if the component has already been loaded then do nothing
+        let result = this.componentRegistry[nodeName];
+        if (result != null) {
+            if (typeof result !== "string") return;
+            return await this.loadComponentFromPath(nodeName, result);
+        }
+
+        // 2. get the component location path. If the path is void, do nothing
+        const path = this.componentLocations[location];
+        if (path == null) return;
+
+        // 3. get the component module and set it on the component registry
+        await this.loadComponentFromPath(nodeName,`${path}/${nodeName}/${nodeName}.js`);
+    }
+
+    async loadComponentFromPath(nodeName, path) {
+        const prefix = document.body.dataset.appPath || "";
+        this.componentRegistry[nodeName] = await import(`${prefix}${path}`);
     }
 
     async getDefault(key) {
@@ -61,7 +106,7 @@ export class Modules {
         return proto ? new proto(...args) : null;
     }
 
-    async call(key, thisObj, fnName, ...args) {
+    async call(key, fnName, thisObj, ...args) {
         const module = await this.get(key);
         const fn = module?.[fnName || key];
         return await fn?.call(thisObj, ...args);
@@ -78,14 +123,14 @@ globalThis.crs.modules = new Modules();
 
 globalThis.crs.modules.enableBinding = async (modules) => {
     for (let module of modules || []) {
-        await globalThis.crs.modules.add(module[0], module[1]);
+        await globalThis.crs.modules.addComponent(module[0], module[1]);
     }
 
     if (globalThis.crsbinding != null) {
         globalThis.crs.modules._parseElement = globalThis.crsbinding.parsers.parseElement;
         globalThis.crsbinding.parsers.parseElement = async (element, context, options) => {
             await globalThis.crs.modules._parseElement(element, context, options);
-            globalThis.crs.modules.get(element.nodeName.toLowerCase());
+            await globalThis.crs.modules.getComponent(element.nodeName.toLowerCase(), element.dataset.module);
         }
     }
 }

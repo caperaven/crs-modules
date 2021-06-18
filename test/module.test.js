@@ -1,6 +1,7 @@
 import "./../src/crs-modules.js";
 
 beforeAll(() => {
+    crs.modules.addModuleLocation('pv', "../modules");
     crs.modules.add("fnTest", "../app/function-test.js");
     crs.modules.add("clsTest", "../app/class-test.js");
     crs.modules.add("lib", "../app/library-test.js");
@@ -58,7 +59,7 @@ test("module - getInstanceOfDefault", async () => {
 })
 
 test("module - call", async () => {
-    const result = await crs.modules.call("fnTest", null, "functionTest", 1, 2);
+    const result = await crs.modules.call("fnTest", "functionTest", null, 1, 2);
     const result2 = await crs.modules.call("fnTest", null, null, 1, 2);
     expect(result).toEqual(3);
     expect(result2).toEqual(3);
@@ -87,4 +88,13 @@ test("module - null", async () => {
 
     const m6 = await crs.modules.callDefault("none", null);
     expect(m6).toBeUndefined();
+})
+
+test("module - module from location", async () => {
+    const module = await crs.modules.get("pv:my-module");
+    expect(module).not.toBeUndefined();
+    expect(module).not.toBeNull();
+
+    const result = await crs.modules.call("pv:my-module", "whoAmI");
+    expect(result).toEqual("cool");
 })
