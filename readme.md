@@ -98,3 +98,50 @@ Call a function that is set as the default export.
 ```js
 await crs.modules.callDefault("default", null, "Hello World"); 
 ```
+
+## Locations
+
+In some cases you can use a convention over code method to register modules.  
+This means you don't need to load each module individually but load it based on a location.  
+This works a little different between auto-loading component files vs library files.
+
+<strong>To register a component location</strong>
+```js
+await crs.modules.addComponentLocation("pv", "/components");
+```
+
+<strong>To register a module location</strong>
+```js
+await crs.modules.addModuleLocation('pv', "../modules");
+```
+
+Since component registry is separate from the module registry, you can reuse the sake key.
+
+<strong>Components using locations</strong> 
+```js
+<test-component data-module="pv"></test-component>
+```
+
+Using this option, when crs-binding processes the element it will see you have a module location defined on the component and load it using a naming convention.
+The convention works like this.
+```js
+`${location}/${nodeName}/${nodeName}.js` // "/components/test-component/test-component.js"
+```
+
+<strong>executing features on path</strong>
+```js
+const result = await crs.modules.call("pv:my-module", "whoAmI");
+```
+
+This example shows how you use a location key with the module name.  
+This also uses a convention over code.  
+
+```js
+`${location}/${module}.js` // "/modules/my-module.js"
+```
+
+If you don't want to use the file name, you will need to register the module with 
+
+```js
+await crs.modules.add("module-name", "/app/function-test.js");
+```

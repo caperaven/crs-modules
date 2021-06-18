@@ -17,16 +17,10 @@
 
         (async () => {
             await crs.modules.addComponentLocation("pv", "/components");
-            await crs.modules.addModuleLocation("pv", "/modules");
             await crs.modules.enableBinding([
                 ["my-component", "/app/component.js"]
             ]);
         })().then(() => crsbinding.parsers.parseElement(document.body, {}))
-
-        crs.modules.call("pv:math", "add")
-        crs.modules.call("ok:math", "add")
-
-
     </script>
 </body>
 </html>
