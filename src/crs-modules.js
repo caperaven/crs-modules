@@ -130,7 +130,10 @@ globalThis.crs.modules.enableBinding = async (modules) => {
         globalThis.crs.modules._parseElement = globalThis.crsbinding.parsers.parseElement;
         globalThis.crsbinding.parsers.parseElement = async (element, context, options) => {
             await globalThis.crs.modules._parseElement(element, context, options);
-            await globalThis.crs.modules.getComponent(element.nodeName.toLowerCase(), element.dataset.module);
+
+            if (element.dataset != null) {
+                await globalThis.crs.modules.getComponent(element.nodeName.toLowerCase(), element.dataset?.module);
+            }
         }
     }
 }
