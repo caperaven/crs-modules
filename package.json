@@ -8,8 +8,7 @@
     },
     "scripts": {
         "test": "jest",
-        "bundle": "rollup -c",
-        "build-publish": "node build/publish.js"
+        "bundle": "deno run --allow-read --allow-write --allow-env --allow-run ./build/package.js"
     },
     "keywords": [],
     "author": "",
